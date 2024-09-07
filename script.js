@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.querySelector('.grid-container');
 
+  // Carregar estado salvo do localStorage
+  const savedState = JSON.parse(localStorage.getItem('selfCareChallenge')) || {};
+
   days.forEach(day => {
     const card = document.createElement('div');
     card.className = 'card';
@@ -45,8 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     container.appendChild(card);
 
+    // Verificar se o card está marcado como concluído
+    if (savedState[day.number]) {
+      card.classList.add('checked');
+    }
+
     card.querySelector('.checkmark').addEventListener('click', () => {
       card.classList.toggle('checked');
+      savedState[day.number] = card.classList.contains('checked');
+      localStorage.setItem('selfCareChallenge', JSON.stringify(savedState));
     });
   });
 });
+
